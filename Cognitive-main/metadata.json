@@ -1,0 +1,5 @@
+{
+  "name": "Code Visualization Game",
+  "description": "An interactive coding simulator that helps beginners visualize Python code execution step-by-step with AI-powered explanations.",
+  "requestFramePermissions": []
+}
