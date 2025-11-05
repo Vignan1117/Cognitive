@@ -1,4 +1,4 @@
-import type { Difficulty, Language } from './types';
+import type { Difficulty, Language, Algorithm } from './types';
 
 export const LANGUAGES: Language[] = ['Python', 'JavaScript', 'Java', 'C', 'C#', 'Ruby'];
 
@@ -6,6 +6,72 @@ export const CHALLENGE_UNLOCK_REQUIREMENTS: Record<number, number> = {
     1: 2, // Need 2 Beginner challenges to unlock Intermediate
     2: 3, // Need 3 Intermediate challenges to unlock Advanced
 };
+
+export const ALGORITHMS: Algorithm[] = [
+    {
+        title: "Bubble Sort",
+        description: "A simple sorting algorithm that repeatedly steps through the list, compares adjacent elements and swaps them if they are in the wrong order.",
+        category: "Sorting",
+        language: "Python",
+        meta: { type: 'sort', dataKey: 'arr' },
+        code: `def bubble_sort(arr):
+    n = len(arr)
+    # Traverse through all array elements
+    for i in range(n):
+        swapped = False
+        # Last i elements are already in place
+        for j in range(0, n-i-1):
+            # Traverse the array from 0 to n-i-1
+            # Swap if the element found is greater than the next element
+            if arr[j] > arr[j+1]:
+                arr[j], arr[j+1] = arr[j+1], arr[j]
+                swapped = True
+        # If no two elements were swapped by inner loop, then break
+        if not swapped:
+            break
+    return arr
+
+# Driver code to test above
+arr = [64, 34, 25, 12, 22, 11, 90]
+sorted_arr = bubble_sort(arr)
+`
+    },
+    {
+        title: "Binary Search",
+        description: "An efficient algorithm for finding an item from a sorted list of items. It works by repeatedly dividing in half the portion of the list that could contain the item.",
+        category: "Searching",
+        language: "Python",
+        meta: { type: 'search', dataKey: 'arr', targetKey: 'target' },
+        code: `def binary_search(arr, target):
+    low = 0
+    high = len(arr) - 1
+    mid = 0
+
+    while low <= high:
+        mid = low + (high - low) // 2
+        
+        # Check if target is present at mid
+        if arr[mid] == target:
+            return mid
+        # If target is greater, ignore left half
+        elif arr[mid] < target:
+            low = mid + 1
+        # If target is smaller, ignore right half
+        else:
+            high = mid - 1
+            
+    # If we reach here, then the element was not present
+    return -1
+
+# Test array
+arr = [2, 5, 8, 12, 16, 23, 38, 56, 72, 91]
+target = 23
+
+# Function call
+result = binary_search(arr, target)
+`
+    }
+];
 
 export const CHALLENGES_BY_LANGUAGE: Record<Language, Difficulty[]> = {
     Python: [

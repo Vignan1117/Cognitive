@@ -18,6 +18,7 @@ interface SequenceViewerProps {
     language: Language | null;
     breakpoints: number[];
     onToggleBreakpoint: (lineNumber: number) => void;
+    className?: string;
 }
 
 const languageMap: Record<Language, string> = {
@@ -29,7 +30,7 @@ const languageMap: Record<Language, string> = {
     'Ruby': 'ruby',
 };
 
-const SequenceViewer: React.FC<SequenceViewerProps> = ({ code, onCodeChange, currentLine, isExecuting, title, language, breakpoints, onToggleBreakpoint }) => {
+const SequenceViewer: React.FC<SequenceViewerProps> = ({ code, onCodeChange, currentLine, isExecuting, title, language, breakpoints, onToggleBreakpoint, className }) => {
     const editorContainerRef = useRef<HTMLDivElement>(null);
     const editorRef = useRef<any>(null);
     const decorationsRef = useRef<string[]>([]);
@@ -131,13 +132,15 @@ const SequenceViewer: React.FC<SequenceViewerProps> = ({ code, onCodeChange, cur
 
 
     return (
-        <div className="game-panel flex flex-col h-[400px] lg:h-auto lg:min-h-[400px]">
-            <div className="game-panel-header">
-                <h2 className="text-lg font-semibold text-cyan-300 tracking-wider font-orbitron">
-                    {title || 'Sequence Matrix'}
-                </h2>
-            </div>
-            <div ref={editorContainerRef} className="flex-grow w-full p-2 game-panel-content"></div>
+        <div className={`game-panel flex flex-col h-[400px] lg:h-auto lg:min-h-[400px] ${className || ''}`}>
+            {title && (
+                <div className="game-panel-header">
+                    <h2 className="text-lg font-semibold text-cyan-300 tracking-wider font-orbitron">
+                        {title}
+                    </h2>
+                </div>
+            )}
+            <div ref={editorContainerRef} className={`flex-grow w-full ${title ? 'p-2' : ''} game-panel-content`}></div>
         </div>
     );
 };

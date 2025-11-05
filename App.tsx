@@ -1,5 +1,6 @@
+
 import React, { useState, useEffect, useRef } from 'react';
-import type { ExecutionStep, Language, QuizQuestion } from './types';
+import type { ExecutionStep, Language, QuizQuestion, AlgorithmMeta } from './types';
 import { getExecutionTrace, getQuizForCode } from './services/geminiService';
 import Header from './components/Header';
 import SequenceViewer from './components/CodeEditor';
@@ -14,6 +15,7 @@ import { useUserData, XP_FOR_CHALLENGE_COMPLETION, XP_PER_CORRECT_ANSWER } from 
 import XpGainIndicator from './components/XpGainIndicator';
 import ChallengeCompleteModal from './components/ChallengeCompleteModal';
 import LevelUpModal from './components/LevelUpModal';
+import AlgorithmVisualizer from './components/AlgorithmVisualizer';
 
 
 const App: React.FC = () => {
@@ -31,6 +33,7 @@ const App: React.FC = () => {
     const [xpGain, setXpGain] = useState<{ amount: number; key: number } | null>(null);
     const [completedChallengeTitle, setCompletedChallengeTitle] = useState<string | null>(null);
     const [showLevelUp, setShowLevelUp] = useState(false);
+    const [algorithmMeta, setAlgorithmMeta] = useState<AlgorithmMeta | null>(null);
 
     const { userData, addXp, completeChallenge, xpProgress, xpForNextLevel } = useUserData();
     const prevLevelRef = useRef(userData.level);
@@ -42,7 +45,6 @@ const App: React.FC = () => {
     }, [currentStep, trace, quiz]);
     
     useEffect(() => {
-        // Show level up modal
         if (userData.level > prevLevelRef.current) {
             setShowLevelUp(true);
         }
@@ -54,17 +56,19 @@ const App: React.FC = () => {
         setTimeout(() => setXpGain(null), 2000); // Duration of animation
     };
 
-    const handleSelectExample = (newCode: string, title: string, lang: Language) => {
+    const handleStartVisualization = (newCode: string, title: string, lang: Language, meta: AlgorithmMeta | null) => {
         handleReset();
         setCode(newCode);
         setChallengeTitle(title);
         setLanguage(lang);
+        setAlgorithmMeta(meta);
     };
 
     const handleLanguageChange = (newLanguage: Language) => {
         setLanguage(newLanguage);
         if (challengeTitle && challengeTitle !== 'Custom Sequence Sandbox') {
             setChallengeTitle("Custom Sequence Sandbox");
+            setAlgorithmMeta(null);
         }
     };
 
@@ -82,14 +86,16 @@ const App: React.FC = () => {
         setQuiz(null);
 
         try {
-            const traceResult = await getExecutionTrace(code, language);
+            const traceResult = await getExecutionTrace(code, language, algorithmMeta);
             
             if (traceResult && traceResult.length > 0) {
                 setTrace(traceResult);
 
-                // Now fetch the quiz after the trace is successful
-                const quizResult = await getQuizForCode(code, language);
-                setQuiz(quizResult);
+                // Don't fetch quiz for algorithms
+                if (!algorithmMeta) {
+                    const quizResult = await getQuizForCode(code, language);
+                    setQuiz(quizResult);
+                }
                 
                 if (debugMode) {
                     const breakpointLines: number[] = Array.from(breakpoints);
@@ -152,6 +158,7 @@ const App: React.FC = () => {
         setIsDebugging(false);
         setShowQuiz(false);
         setQuiz(null);
+        setAlgorithmMeta(null);
     };
     
     const handleQuizAnswer = (isCorrect: boolean) => {
@@ -162,7 +169,7 @@ const App: React.FC = () => {
     };
 
     const handleQuizComplete = () => {
-        if (language && challengeTitle && challengeTitle !== 'Custom Sequence Sandbox') {
+        if (language && challengeTitle && challengeTitle !== 'Custom Sequence Sandbox' && challengeTitle !== 'Custom Algorithm') {
             const isAlreadyCompleted = userData.completedChallenges[language]?.includes(challengeTitle);
 
             if (!isAlreadyCompleted) {
@@ -237,8 +244,17 @@ const App: React.FC = () => {
                     trace={trace}
                     currentStepIndex={currentStep}
                 />
-                <DataCoreView variables={currentTraceStep.globals} key={currentStep}/>
-                <EchoChamberView output={currentTraceStep.output} />
+                {algorithmMeta ? (
+                    <AlgorithmVisualizer
+                        currentStep={currentTraceStep}
+                        meta={algorithmMeta}
+                    />
+                ) : (
+                    <>
+                        <DataCoreView variables={currentTraceStep.globals} key={currentStep}/>
+                        <EchoChamberView output={currentTraceStep.output} />
+                    </>
+                )}
                </>
             );
         }
@@ -271,7 +287,7 @@ const App: React.FC = () => {
             />
             <main className="container mx-auto p-4 md:p-6">
                  {code === '' && !isLoading ? (
-                    <ChallengeSelector onSelectExample={handleSelectExample} completedChallenges={userData.completedChallenges} />
+                    <ChallengeSelector onStartVisualization={handleStartVisualization} completedChallenges={userData.completedChallenges} />
                 ) : (
                     <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
                         {/* Left Column */}

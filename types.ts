@@ -1,4 +1,10 @@
 
+
+export interface AlgorithmHighlight {
+    type: 'compare' | 'swap' | 'range' | 'mid' | 'found' | 'pivot';
+    indices: number[];
+}
+
 export interface ExecutionStep {
     line: number;
     globals: Record<string, any>;
@@ -6,6 +12,7 @@ export interface ExecutionStep {
     explanation: string;
     executionTimeMicroseconds: number;
     memoryUsageBytes: number;
+    highlights?: AlgorithmHighlight;
 }
 
 export interface Example {
@@ -31,4 +38,19 @@ export interface UserData {
     level: number;
     xp: number;
     completedChallenges: Record<Language, string[]>;
+}
+
+export interface AlgorithmMeta {
+    type: 'sort' | 'search';
+    dataKey: string; // the name of the array variable in the code
+    targetKey?: string; // for search algorithms
+}
+
+export interface Algorithm {
+    title: string;
+    description: string;
+    category: 'Sorting' | 'Searching';
+    code: string;
+    language: Language;
+    meta: AlgorithmMeta;
 }
