@@ -49,7 +49,7 @@ sorted_arr = bubble_sort(arr)
 
     while low <= high:
         mid = low + (high - low) // 2
-        
+
         # Check if target is present at mid
         if arr[mid] == target:
             return mid
@@ -59,7 +59,7 @@ sorted_arr = bubble_sort(arr)
         # If target is smaller, ignore right half
         else:
             high = mid - 1
-            
+
     # If we reach here, then the element was not present
     return -1
 
@@ -69,6 +69,261 @@ target = 23
 
 # Function call
 result = binary_search(arr, target)
+`
+    },
+    {
+        title: "Selection Sort",
+        description: "A sorting algorithm that divides the input into sorted and unsorted regions, repeatedly selecting the minimum element from the unsorted region.",
+        category: "Sorting",
+        language: "Python",
+        meta: { type: 'sort', dataKey: 'arr' },
+        code: `def selection_sort(arr):
+    n = len(arr)
+
+    for i in range(n):
+        # Find the minimum element in remaining unsorted array
+        min_idx = i
+        for j in range(i+1, n):
+            if arr[j] < arr[min_idx]:
+                min_idx = j
+
+        # Swap the found minimum element with the first element
+        arr[i], arr[min_idx] = arr[min_idx], arr[i]
+
+    return arr
+
+# Driver code
+arr = [64, 34, 25, 12, 22, 11, 90]
+sorted_arr = selection_sort(arr)
+`
+    },
+    {
+        title: "Insertion Sort",
+        description: "A sorting algorithm that builds the final sorted array one item at a time by inserting elements into their correct position.",
+        category: "Sorting",
+        language: "Python",
+        meta: { type: 'sort', dataKey: 'arr' },
+        code: `def insertion_sort(arr):
+    # Traverse through 1 to len(arr)
+    for i in range(1, len(arr)):
+        key = arr[i]
+        j = i - 1
+
+        # Move elements greater than key one position ahead
+        while j >= 0 and arr[j] > key:
+            arr[j + 1] = arr[j]
+            j -= 1
+
+        # Insert the key at its correct position
+        arr[j + 1] = key
+
+    return arr
+
+# Driver code
+arr = [64, 34, 25, 12, 22, 11, 90]
+sorted_arr = insertion_sort(arr)
+`
+    },
+    {
+        title: "Linear Search",
+        description: "A simple search algorithm that checks every element in the list one by one until finding the target or reaching the end.",
+        category: "Searching",
+        language: "Python",
+        meta: { type: 'search', dataKey: 'arr', targetKey: 'target' },
+        code: `def linear_search(arr, target):
+    # Traverse through all elements
+    for i in range(len(arr)):
+        if arr[i] == target:
+            return i
+
+    # If element not found
+    return -1
+
+# Test array
+arr = [64, 34, 25, 12, 22, 11, 90]
+target = 25
+
+# Function call
+result = linear_search(arr, target)
+`
+    },
+    {
+        title: "Merge Sort",
+        description: "A divide-and-conquer sorting algorithm that divides the array in half, recursively sorts each half, and merges them back together.",
+        category: "Sorting",
+        language: "Python",
+        meta: { type: 'sort', dataKey: 'arr' },
+        code: `def merge_sort(arr):
+    if len(arr) <= 1:
+        return arr
+
+    mid = len(arr) // 2
+    left = arr[:mid]
+    right = arr[mid:]
+
+    left = merge_sort(left)
+    right = merge_sort(right)
+
+    return merge(left, right)
+
+def merge(left, right):
+    result = []
+    i = j = 0
+
+    while i < len(left) and j < len(right):
+        if left[i] <= right[j]:
+            result.append(left[i])
+            i += 1
+        else:
+            result.append(right[j])
+            j += 1
+
+    result.extend(left[i:])
+    result.extend(right[j:])
+    return result
+
+# Driver code
+arr = [64, 34, 25, 12, 22, 11, 90]
+sorted_arr = merge_sort(arr)
+`
+    },
+    {
+        title: "Quick Sort",
+        description: "A divide-and-conquer sorting algorithm that partitions the array around a pivot element and recursively sorts the partitions.",
+        category: "Sorting",
+        language: "Python",
+        meta: { type: 'sort', dataKey: 'arr' },
+        code: `def quick_sort(arr):
+    if len(arr) <= 1:
+        return arr
+
+    pivot = arr[len(arr) // 2]
+    left = [x for x in arr if x < pivot]
+    middle = [x for x in arr if x == pivot]
+    right = [x for x in arr if x > pivot]
+
+    return quick_sort(left) + middle + quick_sort(right)
+
+# Driver code
+arr = [64, 34, 25, 12, 22, 11, 90]
+sorted_arr = quick_sort(arr)
+`
+    },
+    {
+        title: "Fibonacci Sequence",
+        description: "A sequence where each number is the sum of the two preceding ones. Common example of recursion and dynamic programming.",
+        category: "Fundamentals",
+        language: "Python",
+        meta: { type: 'sort', dataKey: 'arr' },
+        code: `def fibonacci(n):
+    if n <= 0:
+        return 0
+    elif n == 1:
+        return 1
+    else:
+        return fibonacci(n - 1) + fibonacci(n - 2)
+
+# Generate first 10 fibonacci numbers
+arr = [fibonacci(i) for i in range(10)]
+print(arr)
+`
+    },
+    {
+        title: "Prime Number Check",
+        description: "Determines if a given number is prime by checking divisibility from 2 to its square root.",
+        category: "Fundamentals",
+        language: "Python",
+        meta: { type: 'search', dataKey: 'arr', targetKey: 'target' },
+        code: `def is_prime(n):
+    if n < 2:
+        return False
+    if n == 2:
+        return True
+    if n % 2 == 0:
+        return False
+
+    # Check odd divisors up to sqrt(n)
+    for i in range(3, int(n**0.5) + 1, 2):
+        if n % i == 0:
+            return False
+    return True
+
+# Test with multiple numbers
+arr = [2, 3, 4, 5, 10, 13, 17, 20, 23]
+primes = [n for n in arr if is_prime(n)]
+print(primes)
+`
+    },
+    {
+        title: "Depth-First Search",
+        description: "A graph traversal algorithm that explores as far as possible along each branch before backtracking.",
+        category: "Fundamentals",
+        language: "Python",
+        meta: { type: 'sort', dataKey: 'arr' },
+        code: `def dfs(graph, node, visited=None):
+    if visited is None:
+        visited = set()
+
+    visited.add(node)
+    print(f"Visiting {node}")
+
+    for neighbor in graph.get(node, []):
+        if neighbor not in visited:
+            dfs(graph, neighbor, visited)
+
+    return visited
+
+# Simple graph representation
+graph = {
+    'A': ['B', 'C'],
+    'B': ['A', 'D'],
+    'C': ['A', 'E'],
+    'D': ['B'],
+    'E': ['C']
+}
+
+# Start DFS from node A
+result = dfs(graph, 'A')
+arr = list(result)
+`
+    },
+    {
+        title: "Breadth-First Search",
+        description: "A graph traversal algorithm that explores vertices in layers, visiting all neighbors before moving to the next level.",
+        category: "Fundamentals",
+        language: "Python",
+        meta: { type: 'sort', dataKey: 'arr' },
+        code: `from collections import deque
+
+def bfs(graph, start):
+    visited = set()
+    queue = deque([start])
+    visited.add(start)
+    result = []
+
+    while queue:
+        node = queue.popleft()
+        result.append(node)
+        print(f"Visiting {node}")
+
+        for neighbor in graph.get(node, []):
+            if neighbor not in visited:
+                visited.add(neighbor)
+                queue.append(neighbor)
+
+    return result
+
+# Simple graph representation
+graph = {
+    'A': ['B', 'C'],
+    'B': ['A', 'D'],
+    'C': ['A', 'E'],
+    'D': ['B'],
+    'E': ['C']
+}
+
+# Start BFS from node A
+arr = bfs(graph, 'A')
 `
     }
 ];
