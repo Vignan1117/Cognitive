@@ -20,7 +20,7 @@ export const ForwardIcon: React.FC = () => (
 
 export const ArrowPathIcon: React.FC = () => (
     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="w-5 h-5">
-        <path fillRule="evenodd" d="M15.312 11.342a1.25 1.25 0 0 1 .938 2.312A7.5 7.5 0 0 1 3.75 12a.75.75 0 0 1 1.5 0 6 6 0 0 0 10.9-3.26.75.75 0 0 1 .75-.75Zm-12.824-3.a1.25 1.25 0 0 1-1.25-1.25A7.5 7.5 0 0 1 16.25 8a.75.75 0 0 1-1.5 0 6 6 0 0 0-10.9 3.26.75.75 0 0 1-.488.732Z" clipRule="evenodd" />
+        <path fillRule="evenodd" d="M15.312 11.342a1.25 1.25 0 0 1 .938 2.312A7.5 7.5 0 0 1 3.75 12a.75.75 0 0 1 1.5 0 6 6 0 0 0 10.9-3.26.75.75 0 0 1 .75-.75Zm-12.824-3.684a1.25 1.25 0 0 1-1.25-1.25A7.5 7.5 0 0 1 16.25 8a.75.75 0 0 1-1.5 0 6 6 0 0 0-10.9 3.26.75.75 0 0 1-.488.732Z" clipRule="evenodd" />
     </svg>
 );
 
